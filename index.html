@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#100d1e"><meta name="description" content="Selecione os melhores quadros do seu vídeo, sem enviar nada.">
+  <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css"><title>Ângulo — quadros do vídeo</title>
+</head>
+<body>
+<main class="shell">
+<header><div class="brand"><span class="mark">∠</span><div><h1>Ângulo</h1><p>Quadros que valem parar</p></div></div><button id="installBtn" class="ghost" hidden>Instalar</button></header>
+<section id="privacy" class="notice"><span>◉</span><p><b>Privado por padrão.</b> Seu vídeo nunca é enviado: a análise roda neste aparelho e o arquivo é descartado ao fechar a página.</p></section>
+<section id="dropZone" class="drop-zone" aria-label="Enviar vídeo"><input id="videoInput" type="file" accept="video/*" hidden><div class="drop-icon">↥</div><h2>Solte um vídeo aqui</h2><p>ou escolha um arquivo do celular</p><button id="chooseBtn" class="lime">Escolher vídeo</button><small>Abre localmente, sem upload · até 30 min · MP4, WebM e formatos compatíveis</small></section>
+<section id="workspace" hidden>
+  <div class="video-wrap"><video id="video" controls playsinline preload="metadata"></video><button id="captureBtn" class="capture" title="Capturar quadro atual">◉ Capturar</button></div>
+  <div class="meta"><strong id="fileName">—</strong><span id="videoInfo">Carregando…</span><button id="changeBtn" class="text-btn">Trocar</button></div>
+  <section class="analyze-card"><div class="card-head"><div><h2>Encontrar melhores quadros</h2><p>Compara nitidez, exposição, contraste e variedade visual.</p></div><span id="statusPill" class="pill">Pronto</span></div>
+  <div class="controls"><label>Amostras<select id="sampleCount"><option value="24">24 · muito rápido</option><option value="60" selected>60 · padrão rápido</option><option value="120">120 · detalhado</option></select></label><label>Resultados<select id="resultCount"><option value="6">6</option><option value="8" selected>8</option><option value="10">10</option><option value="12">12</option></select></label><button id="analyzeBtn" class="lime">Analisar vídeo</button><button id="cancelBtn" class="ghost" hidden>Cancelar</button></div>
+  <div id="progressArea" hidden><div class="progress-label"><span id="progressText">Preparando…</span><span id="progressNum">0%</span></div><div class="progress"><i id="progressBar"></i></div></div>
+  <p class="honesty">Análise técnica, não IA semântica: não reconhece pessoas, cenas ou “o melhor ângulo” e não cria ângulos que não existam no vídeo.</p></section>
+</section>
+<section id="gallerySection" hidden><div class="gallery-head"><div><h2>Seleção</h2><p id="galleryCopy">Toque na estrela para guardar.</p></div><div><button id="downloadSelectedBtn" class="ghost" disabled>Baixar selecionadas</button><button id="clearBtn" class="text-btn">Limpar</button></div></div><div id="gallery" class="gallery"></div></section>
+<section id="emptyGallery" class="empty"><span>✦</span><p>Seus quadros selecionados aparecerão aqui.</p></section>
+<section class="how"><h2>Como funciona</h2><ol><li>Escolha um vídeo do aparelho.</li><li>A análise lê quadros espaçados e seleciona momentos visualmente mais nítidos e diversos.</li><li>Baixe em JPEG na resolução original do vídeo.</li></ol><p><b>No iPhone/iPad:</b> abra no Safari, toque em Compartilhar e em “Adicionar à Tela de Início”.</p></section>
+</main><div id="toast" role="status" aria-live="polite"></div><canvas id="canvas" hidden></canvas><script src="analysis.js"></script><script src="app.js"></script>
+</body></html>
