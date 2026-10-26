@@ -1,5 +1,5 @@
-const CACHE='angulo-v1.1.0';
-const APP=['./','./index.html','./style.css','./app.js','./analysis.js','./manifest.webmanifest','./icons/icon-192.png','./icons/icon-512.png'];
+const CACHE='angulo-v1.1.1';
+const APP=['./','./index.html','./style.css','./app.js','./analysis.js','./manifest.webmanifest','./icons/icon-192.svg','./icons/icon-512.svg'];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(APP)).then(()=>self.skipWaiting())));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('angulo-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
