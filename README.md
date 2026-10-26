@@ -1,3 +1,10 @@
+## 1.2.1 · nitidez primeiro
+Por solicitação do usuário, nitidez é o primeiro critério em todos os modos entre quadros elegíveis. Outros fatores só desempatem. Corte relativo: descarta abaixo de 55% da maior medida de nitidez amostrada; não garante recuperar detalhes de vídeos borrados. Seleção de diversidade em passagem única, sempre ordenada por nitidez.
+
+## Versão 1.2.0 · foco automático
+
+Modos Geral, Rosto visível e Corpo inteiro. MoveNet SinglePose escolhe quadros elegíveis, sem recorte. Pode falhar com múltiplas pessoas, cortes, pouca luz e poses. Não há detecção de partes íntimas. Download inicial aproximado 6 MB; inferência local, nenhum vídeo enviado. No site público, runtime TFJS 4.22.0 e pesos MoveNet são baixados de jsDelivr com versões fixadas quando indisponíveis localmente. Cache API guarda pesos. Dependências Apache-2.0. Teste público: modos disponíveis, inferência real e rejeição de canvas vazio nos dois modos. Teste local de rosto positivo; corpo inteiro ainda sem fixture positivo confirmado. Falta validação celular real.
+
 # Ângulo — PWA local de seleção de quadros (v1.1.0)
 
 PWA em pt-BR que abre vídeos **no próprio aparelho**, encontra quadros tecnicamente interessantes e exporta JPEG. Não há upload, API, CDN ou servidor de processamento.

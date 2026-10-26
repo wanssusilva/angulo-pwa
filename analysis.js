@@ -30,19 +30,22 @@ window.AnguloAnalysis=(()=>{
   function rank(items,wanted,duration){
     if(!items.length||wanted<1)return [];
     normalize(items,'sharp');normalize(items,'contrast');normalize(items,'exposure');
-    items.forEach(x=>x.score=.46*x.sharp+.24*x.contrast+.2*x.exposure+.1*x.metrics.balanced+.25*(x.focusConfidence||0));
-    const ordered=[...items].sort((a,b)=>b.score-a.score),selected=[];
-    // Primeiro preserva o espaçamento ideal. Só relaxa explicitamente se faltarem quadros.
-    const idealGap=Math.max(.3,Math.max(0,duration)/(Math.max(1,wanted)*3.4));
-    const passes=[{gap:idealGap,distance:9},{gap:idealGap*.6,distance:8},{gap:idealGap*.3,distance:6}];
-    for(const pass of passes){
-      for(const item of ordered){
-        if(selected.length>=wanted)break;
-        const spaced=selected.every(s=>Math.abs(item.time-s.time)>=pass.gap);
-        const different=selected.every(s=>hamming(item.metrics.hash,s.metrics.hash)>pass.distance);
-        if(spaced&&different)selected.push(item);
-      }
+    // Nitidez é prioridade absoluta entre quadros elegíveis ao foco escolhido.
+    // Os demais critérios só desempatem nitidez idêntica; nunca a compensam.
+    items.forEach(x=>x.score=.4*x.contrast+.3*x.exposure+.1*x.metrics.balanced+.2*(x.focusConfidence||0));
+    const bestSharp=Math.max(...items.map(x=>x.metrics.sharp));
+    // Corte relativo conservador: não completar a galeria com quadros muito
+    // menos nítidos. Não é garantia de ausência de desfoque no vídeo original.
+    const candidates=items.filter(x=>x.metrics.sharp>=bestSharp*.55);
+    const ordered=[...candidates].sort((a,b)=>b.metrics.sharp-a.metrics.sharp||b.score-a.score),selected=[];
+    // Uma única passagem em ordem de nitidez: diversidade não promove
+    // um quadro menos nítido à frente de outro elegível mais nítido.
+    const gap=Math.max(.3,Math.max(0,duration)/(Math.max(1,wanted)*3.4))*.3;
+    for(const item of ordered){
       if(selected.length>=wanted)break;
+      const spaced=selected.every(s=>Math.abs(item.time-s.time)>=gap);
+      const different=selected.every(s=>hamming(item.metrics.hash,s.metrics.hash)>6);
+      if(spaced&&different)selected.push(item);
     }
     // Não preenche à força: em vídeos curtos/repetitivos pode retornar menos resultados.
     return selected.sort((a,b)=>a.time-b.time);
