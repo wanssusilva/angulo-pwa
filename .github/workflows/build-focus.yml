@@ -1,0 +1,31 @@
+name: Prepare local focus detector
+on:
+  push:
+    paths: ['.github/workflows/build-focus.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download pinned detector assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p vendor models/movenet
+          curl --fail --location --retry 3 'https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js' -o vendor/tf.min.js
+          curl --fail --location --retry 3 'https://www.kaggle.com/models/google/movenet/TfJs/singlepose-lightning/4/download' -o /tmp/movenet.tar.gz
+          tar -xzf /tmp/movenet.tar.gz -C models/movenet
+          echo '300dfae273d20b4046f46a06d735688f03675a807561e9bcb5f664eb2f3d2831  vendor/tf.min.js' | sha256sum -c -
+          echo 'c65a3447162efa0c42af29498a4b151f4415b36ff3ae6fae2b28a32e840dcbfb  models/movenet/model.json' | sha256sum -c -
+          echo 'b42c3232bf13b0efc691d3f0693dd3fc74404f709b1deee0a271828af6dbbea2  models/movenet/group1-shard1of2.bin' | sha256sum -c -
+          echo '8253ab965aa3122c08f331777ca395ce9ca19bb9e7cb278b99de1c46dbdeb6dc  models/movenet/group1-shard2of2.bin' | sha256sum -c -
+          curl --fail --location 'https://www.apache.org/licenses/LICENSE-2.0.txt' -o vendor/LICENSE-APACHE-2.0.txt
+      - name: Commit verified assets
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add vendor models/movenet
+          git diff --cached --quiet || (git commit -m 'Vendor verified TFJS and MoveNet local assets' && git push)
