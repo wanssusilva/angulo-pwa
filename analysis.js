@@ -30,7 +30,7 @@ window.AnguloAnalysis=(()=>{
   function rank(items,wanted,duration){
     if(!items.length||wanted<1)return [];
     normalize(items,'sharp');normalize(items,'contrast');normalize(items,'exposure');
-    items.forEach(x=>x.score=.46*x.sharp+.24*x.contrast+.2*x.exposure+.1*x.metrics.balanced);
+    items.forEach(x=>x.score=.46*x.sharp+.24*x.contrast+.2*x.exposure+.1*x.metrics.balanced+.25*(x.focusConfidence||0));
     const ordered=[...items].sort((a,b)=>b.score-a.score),selected=[];
     // Primeiro preserva o espaçamento ideal. Só relaxa explicitamente se faltarem quadros.
     const idealGap=Math.max(.3,Math.max(0,duration)/(Math.max(1,wanted)*3.4));
